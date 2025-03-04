@@ -633,19 +633,19 @@ when ODIN_OS == .Darwin {
 	pthread_t :: distinct c.ulong
 
 	pthread_attr_t :: struct #raw_union {
-		__size: [56]c.char, // NOTE: may be smaller depending on libc or arch, but never larger.
+		__size: [64 when ODIN_ARCH == .arm64 else 56]c.char,
 		__align: c.long,
 	}
 
 	pthread_key_t :: distinct c.uint
 
-	pthread_cond_t :: struct {
-		__size: [40]c.char, // NOTE: may be smaller depending on libc or arch, but never larger.
-		__align: c.long,
+	pthread_cond_t :: struct #raw_union {
+		__size: [48]c.char,
+		__align: c.longlong,
 	}
 
-	pthread_mutex_t :: struct {
-		__size: [32]c.char, // NOTE: may be smaller depending on libc or arch, but never larger.
+	pthread_mutex_t :: struct #raw_union {
+		__size: [48 when ODIN_ARCH == .arm64 else 40]c.char,
 		__align: c.long,
 	}
 
